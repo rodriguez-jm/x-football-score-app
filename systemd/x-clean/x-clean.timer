@@ -1,0 +1,10 @@
+[Unit]
+Description=Daily Timer for X Football Score Python app clean up.
+
+[Timer]
+Unit=x-clean.service
+OnCalendar=*-*-* 15:30:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
