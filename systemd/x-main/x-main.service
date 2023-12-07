@@ -1,0 +1,10 @@
+[Unit]
+Description= X Football Score Python app.
+Requires=x-main.timer
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 $HOME/x-football-score-app/api-football-api/main.py
+
+[Install]
+WantedBy=default.target

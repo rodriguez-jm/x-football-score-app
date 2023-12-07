@@ -1,0 +1,10 @@
+[Unit]
+Description=X Football Score Python app cleanup service.
+Requires=x-clean.timer
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 $HOME/x-football-score-app/api-football-api/clean.py
+
+[Install]
+WantedBy=default.target
