@@ -8,13 +8,13 @@ from datetime import datetime
 #################################### Logging ####################################
 
 # Create log file if it doesnt exist
-if not os.path.exists("logs.txt"):
-    with open(f"logs.txt", 'w'):
+if not os.path.exists("$HOME/x-football-score-app/logs.txt"):
+    with open(f"$HOME/x-football-score-app/logs.txt", 'w'):
         pass
 
 # Set log info
 logging.basicConfig(
-    filename="logs.txt",
+    filename="$HOME/x-football-score-app/logs.txt",
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s (%(filename)s:%(lineno)s)"
 )
@@ -25,11 +25,12 @@ logging.info(
 #################################### Variables ####################################
 
 # API-Football endpoint
-url = 'https://api-football-v1.p.rapidapi.com/v3/fixtures'
+url = "https://api-football-v1.p.rapidapi.com/v3/fixtures"
 
 # File to store fixture IDs
-fixture_ids_file = 'completed-fixture-ids.txt'
-all_fixture_ids_file = 'all-fixture-ids.txt'
+fixture_ids_file = "$HOME/x-football-score-app/completed-fixture-ids.txt"
+all_fixture_ids_file = "$HOME/x-football-score-app/all-fixture-ids.txt"
+completed_file = "$HOME/x-football-score-app/completed.txt"
 
 # Pass X secrets from environment variables
 consumer_key = os.environ.get("CONSUMER_KEY")
@@ -42,7 +43,14 @@ ur_token = os.environ.get("UR_TOKEN")
 x_rapid_api_key = os.environ.get("X_RAPID_API_KEY")
 
 #################################### Functions ####################################
-# # Get live fixture information by date
+# Check if script should stop running for the day
+if os.path.exists(completed_file):
+    logging.info("Script complete for the day..Exiting..")
+    logging.info(
+    "************************* Script complete.. *************************")
+    sys.exit(0)
+
+# Get live fixture information by date
 def get_fixtures_by_date(api_url, date):
     querystring = {"league": "39", "season": "2023",
                    "timezone": "America/Los_Angeles", "date": date}
@@ -167,6 +175,9 @@ if __name__ == "__main__":
     else:
         logging.info(f"No fixtures found for today..Removing {all_fixture_ids_file}.")
         os.remove(all_fixture_ids_file)
+        if not os.path.exists(completed_file):
+            with open(completed_file, 'w'):
+                pass
         logging.info(
             "************************* Script complete.. *************************")
         sys.exit(0)
@@ -176,6 +187,9 @@ if __name__ == "__main__":
     logging.info("Checking if all matches have been tweeted for today..")
     if compare == True:
         logging.info("All fixtures tweeted for the day..Removing fixture files..")
+        if not os.path.exists(completed_file):
+            with open(completed_file, 'w'):
+                pass
         logging.info(
            "************************* Script complete.. *************************")
         os.remove(fixture_ids_file)
