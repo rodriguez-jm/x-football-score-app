@@ -57,7 +57,7 @@ def get_fixtures_by_date(api_url, date):
     headers = {"X-RapidAPI-Key": x_rapid_api_key,
                "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"}
     try:
-        response = requests.get(url, headers=headers, params=querystring)
+        response = requests.get(url, headers=headers, params=querystring, timeout=15)
         if response.status_code == 200:
             fixtures_data = response.json()
             return fixtures_data.get('response', [])
